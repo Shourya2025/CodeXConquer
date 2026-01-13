@@ -1,5 +1,6 @@
 package com.codexconquer.timetracking.controller;
 
+import com.codexconquer.timetracking.dto.RegisterRequest;
 import com.codexconquer.timetracking.dto.LoginRequest;
 import com.codexconquer.timetracking.entity.User;
 import com.codexconquer.timetracking.security.JwtUtil;
@@ -18,16 +19,17 @@ public class AuthController {
     private final UserService userService;
     private final JwtUtil jwtUtil;
 
+    @PostMapping("/register")
+    public User register(@RequestBody @Valid RegisterRequest request) {
+        return userService.register(request);
+    }
+
     @PostMapping("/login")
     public Map<String, Object> login(@RequestBody @Valid LoginRequest request) {
 
-        // Authenticate user
         User user = userService.login(request);
-
-        // Generate JWT token
         String token = jwtUtil.generateToken(user.getId(), user.getEmail());
 
-        // Return token + basic user info
         return Map.of(
                 "token", token,
                 "id", user.getId(),

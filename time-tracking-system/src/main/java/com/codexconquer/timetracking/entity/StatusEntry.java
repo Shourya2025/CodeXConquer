@@ -5,13 +5,11 @@ import lombok.*;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-
 @Entity
-@Getter
-@Setter
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class StatusEntry {
 
     @Id
@@ -19,20 +17,18 @@ public class StatusEntry {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @Enumerated(EnumType.STRING)
-    private WorkStatus status;
+    private WorkStatus status;   // ENUM, not String
 
     private LocalDateTime startTime;
     private LocalDateTime endTime;
 
-    @Transient
     public long getDurationMinutes() {
-        if (startTime != null && endTime != null) {
-            return Duration.between(startTime, endTime).toMinutes();
+        if (startTime == null || endTime == null) {
+            return 0;
         }
-        return 0;
+        return Duration.between(startTime, endTime).toMinutes();
     }
 }

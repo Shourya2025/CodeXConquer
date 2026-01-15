@@ -1,8 +1,8 @@
 package com.codexconquer.timetracking.controller;
 
-import com.codexconquer.timetracking.dto.TimeSummaryResponse;
 import com.codexconquer.timetracking.entity.TimeEntry;
 import com.codexconquer.timetracking.service.TimeEntryService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,18 +13,15 @@ public class TimeEntryController {
 
     private final TimeEntryService timeEntryService;
 
-    @PostMapping("/punch-in/{userId}")
-    public TimeEntry punchIn(@PathVariable Long userId) {
+    @PostMapping("/punch-in")
+    public TimeEntry punchIn(HttpServletRequest request) {
+        Long userId = (Long) request.getAttribute("userId");
         return timeEntryService.punchIn(userId);
     }
 
-    @PostMapping("/punch-out/{userId}")
-    public TimeEntry punchOut(@PathVariable Long userId) {
+    @PostMapping("/punch-out")
+    public TimeEntry punchOut(HttpServletRequest request) {
+        Long userId = (Long) request.getAttribute("userId");
         return timeEntryService.punchOut(userId);
-    }
-
-    @GetMapping("/summary/{userId}")
-    public TimeSummaryResponse getSummary(@PathVariable Long userId) {
-        return timeEntryService.getTotalWorkedTime(userId);
     }
 }

@@ -1,8 +1,10 @@
 package com.codexconquer.timetracking.controller;
 
+import com.codexconquer.timetracking.dto.StatusSummaryResponse;
 import com.codexconquer.timetracking.entity.StatusEntry;
 import com.codexconquer.timetracking.entity.WorkStatus;
 import com.codexconquer.timetracking.service.StatusEntryService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,16 +17,22 @@ public class StatusEntryController {
 
     private final StatusEntryService statusEntryService;
 
-    @PostMapping("/{userId}/{status}")
-    public StatusEntry changeStatus(
-            @PathVariable Long userId,
-            @PathVariable WorkStatus status
-    ) {
+    @PostMapping("/{status}")
+    public StatusEntry startStatus(@PathVariable WorkStatus status) {
+        Long userId = 1L;   // temp
         return statusEntryService.startStatus(userId, status);
     }
 
-    @GetMapping("/{userId}")
-    public List<StatusEntry> getStatuses(@PathVariable Long userId) {
-        return statusEntryService.getUserStatuses(userId);
+    @PostMapping("/stop")
+    public StatusEntry stopStatus() {
+        Long userId = 1L;   // temp
+        return statusEntryService.stopStatus(userId);
     }
+
+    @GetMapping("/summary")
+    public List<StatusSummaryResponse> getStatusSummary() {
+        Long userId = 1L;   // temp
+        return statusEntryService.getStatusSummary(userId);
+    }
+
 }
